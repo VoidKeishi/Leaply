@@ -28,8 +28,8 @@
             <nav class="nav">
                 <ul class="nav-list">
                     <li><a href="index.html" class="nav-link">Home</a></li>
-                    <li><a href="#" class="nav-link active">Universities</a></li>
-                    <li><a href="#scholarships" class="nav-link">Scholarships</a></li>
+                    <li><a href="#panel-universities" class="nav-link active">Universities</a></li>
+                    <li><a href="#panel-scholarships" class="nav-link">Scholarships</a></li>
                     <li><a href="about.html" class="nav-link">About</a></li>
                     <li><a href="contact.html" class="nav-link">Contact</a></li>
                     <li><a href="profile.html" class="btn btn-primary">Student Portal</a></li>
@@ -43,8 +43,8 @@
         <nav class="mobile-nav">
             <ul class="nav-list">
                 <li><a href="index.html" class="nav-link">Home</a></li>
-                <li><a href="#" class="nav-link active">Universities</a></li>
-                <li><a href="#scholarships" class="nav-link">Scholarships</a></li>
+                <li><a href="#panel-universities" class="nav-link active">Universities</a></li>
+                <li><a href="#panel-scholarships" class="nav-link">Scholarships</a></li>
                 <li><a href="about.html" class="nav-link">About</a></li>
                 <li><a href="contact.html" class="nav-link">Contact</a></li>
                 <li><a href="profile.html" class="btn btn-primary">Student Portal</a></li>
@@ -111,11 +111,11 @@
             <!-- Search Results Summary -->
             <div class="search-results">
                 <div class="results-header">
-                    <h2>Universities</h2>
+                    <h2 id="results-title">Universities</h2>
                     <p class="results-count">156 results found</p>
-                    <div class="view-toggle">
-                        <button class="btn btn-secondary active">Universities</button>
-                        <button class="btn btn-secondary" onclick="showScholarships()">Scholarships</button>
+                    <div class="tabs" role="tablist" aria-label="Results type">
+                        <button role="tab" id="tab-universities" class="tab" aria-selected="true" aria-controls="panel-universities">Universities</button>
+                        <button role="tab" id="tab-scholarships" class="tab" aria-selected="false" aria-controls="panel-scholarships" tabindex="-1">Scholarships</button>
                     </div>
                 </div>
             </div>
@@ -123,7 +123,7 @@
     </section>
 
     <!-- University Results -->
-    <section id="universities" class="section">
+    <section id="panel-universities" class="section" role="tabpanel" aria-labelledby="tab-universities">
         <div class="container">
             <div class="grid grid-2">
                 <!-- University Card 1 -->
@@ -327,7 +327,7 @@
     </section>
 
     <!-- Scholarship Results (Initially Hidden) -->
-    <section id="scholarships" class="section hidden">
+    <section id="panel-scholarships" class="section hidden" role="tabpanel" aria-labelledby="tab-scholarships">
         <div class="container">
             <div class="grid grid-2">
                 <!-- Scholarship Card 1 -->
@@ -431,43 +431,5 @@
 
     <!-- JavaScript -->
     <script src="js/main.js"></script>
-    
-    <script>
-        // Toggle between universities and scholarships
-        function showScholarships() {
-            document.getElementById('universities').classList.add('hidden');
-            document.getElementById('scholarships').classList.remove('hidden');
-            
-            // Update view toggle buttons
-            const buttons = document.querySelectorAll('.view-toggle .btn');
-            buttons[0].classList.remove('active');
-            buttons[1].classList.add('active');
-            
-            // Update results header
-            document.querySelector('.results-header h2').textContent = 'Scholarships';
-            document.querySelector('.results-count').textContent = '24 results found';
-        }
-        
-        function showUniversities() {
-            document.getElementById('scholarships').classList.add('hidden');
-            document.getElementById('universities').classList.remove('hidden');
-            
-            // Update view toggle buttons
-            const buttons = document.querySelectorAll('.view-toggle .btn');
-            buttons[1].classList.remove('active');
-            buttons[0].classList.add('active');
-            
-            // Update results header
-            document.querySelector('.results-header h2').textContent = 'Universities';
-            document.querySelector('.results-count').textContent = '156 results found';
-        }
-        
-        // Add click handlers for view toggle
-        document.addEventListener('DOMContentLoaded', function() {
-            const buttons = document.querySelectorAll('.view-toggle .btn');
-            buttons[0].addEventListener('click', showUniversities);
-            buttons[1].addEventListener('click', showScholarships);
-        });
-    </script>
 </body>
 </html>

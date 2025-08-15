@@ -4,7 +4,7 @@
 :root {
   /* Color Palette */
   --primary-green: #8dc641;
-  --secondary-green: #cae122;
+  --secondary-green: #dae122;
   --accent-green: #3bb64b;
   --dark-green: #016839;
   --background-white: #FFFFFF;
@@ -270,6 +270,19 @@ p {
   box-shadow: var(--shadow-lg);
 }
 
+/* University and Scholarship Cards */
+.university-card, .scholarship-card {
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.university-card:hover, .scholarship-card:hover {
+  border-color: var(--primary-green);
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-green);
+}
+
 .card-icon {
   width: 60px;
   height: 60px;
@@ -280,6 +293,98 @@ p {
   justify-content: center;
   margin-bottom: var(--space-lg);
   font-size: 1.5rem;
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+.university-logo, .scholarship-logo {
+  width: 60px;
+  height: 60px;
+  background-color: var(--secondary-green);
+  border-radius: var(--radius-lg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.bookmark-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  padding: var(--space-sm);
+  border-radius: var(--radius-sm);
+  transition: all 0.3s ease;
+  color: var(--text-gray);
+}
+
+.bookmark-btn:hover {
+  background-color: var(--section-gray);
+  color: var(--primary-green);
+}
+
+.bookmark-btn.bookmarked {
+  color: var(--primary-green);
+}
+
+/* Card Content */
+.card-location {
+  color: var(--text-gray);
+  font-size: var(--font-size-sm);
+  margin-bottom: var(--space-md);
+}
+
+.card-description {
+  margin-bottom: var(--space-lg);
+  line-height: 1.6;
+}
+
+.card-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  min-width: 80px;
+}
+
+.stat-label {
+  font-size: var(--font-size-xs);
+  color: var(--text-gray);
+  margin-bottom: var(--space-xs);
+}
+
+.stat-value {
+  font-weight: 600;
+  color: var(--dark-gray);
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+}
+
+.tag {
+  background-color: var(--section-gray);
+  color: var(--dark-gray);
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
 }
 
 /* Grid System */
@@ -347,6 +452,42 @@ p {
 .search-input {
   flex: 1;
   min-width: 300px;
+}
+
+/* Tabs */
+.tabs {
+  display: inline-flex;
+  gap: var(--space-sm);
+  border: 2px solid var(--light-gray);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xs);
+  background: var(--background-white);
+}
+
+.tab {
+  appearance: none;
+  background: transparent;
+  border: none;
+  padding: var(--space-sm) var(--space-lg);
+  border-radius: var(--radius-md);
+  color: var(--dark-gray);
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tab[aria-selected="true"] {
+  background: var(--primary-green);
+  color: #fff;
+  box-shadow: var(--shadow-green);
+}
+
+.tab:hover {
+  background: var(--section-gray);
+}
+
+.tab:focus-visible {
+  outline: 3px solid rgba(141, 198, 65, 0.35);
+  outline-offset: 2px;
 }
 
 /* Progress Tracker */

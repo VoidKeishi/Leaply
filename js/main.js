@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initCarousel();
     initAnimations();
     initFormValidation();
+    initTabs();
 });
 
 // Mobile Navigation
@@ -48,6 +49,14 @@ function initSmoothScrolling() {
             const targetElement = document.querySelector(targetId);
             
             if (targetElement) {
+                // If target is a tab panel, activate its tab first
+                if (targetElement.getAttribute('role') === 'tabpanel') {
+                    const panelId = targetElement.id;
+                    const relatedTab = document.querySelector(`[role="tab"][aria-controls="${panelId}"]`);
+                    if (relatedTab) {
+                        relatedTab.click();
+                    }
+                }
                 const headerOffset = 80;
                 const elementPosition = targetElement.offsetTop;
                 const offsetPosition = elementPosition - headerOffset;
@@ -93,7 +102,7 @@ function initSearchFilters() {
         
         // Filter cards based on search and filters
         const cards = document.querySelectorAll('.university-card, .scholarship-card');
-        let visibleCount = 0;
+    let visibleCount = 0;
         
         cards.forEach(card => {
             const title = card.querySelector('h3')?.textContent.toLowerCase() || '';
@@ -131,7 +140,16 @@ function initSearchFilters() {
         if (searchResults) {
             const countElement = searchResults.querySelector('.results-count');
             if (countElement) {
-                countElement.textContent = `${visibleCount} results found`;
+                // Count visible cards in the active panel only
+                const activeTab = document.querySelector('[role="tab"][aria-selected="true"]');
+                const activePanelId = activeTab ? activeTab.getAttribute('aria-controls') : null;
+                if (activePanelId) {
+                    const activePanel = document.getElementById(activePanelId);
+                    const visibleInPanel = activePanel ? Array.from(activePanel.querySelectorAll('.card')).filter(c => c.style.display !== 'none').length : visibleCount;
+                    countElement.textContent = `${visibleInPanel} results found`;
+                } else {
+                    countElement.textContent = `${visibleCount} results found`;
+                }
             }
         }
     }
@@ -345,11 +363,28 @@ function initCardInteractions() {
         }
         
         // Card click for details
-        card.addEventListener('click', function() {
+        card.addEventListener('click', function(e) {
+            // Don't trigger if clicking on bookmark button
+            if (e.target.closest('.bookmark-btn')) {
+                return;
+            }
+            
             const cardId = this.dataset.id;
+            const cardTitle = this.querySelector('h3')?.textContent || 'this item';
+            
             if (cardId) {
+                // Show feedback to user
+                showToast(`Opening details for ${cardTitle}...`, 'info');
+                
                 // In a real app, this would navigate to a detail page
                 console.log(`View details for ${cardId}`);
+                
+                // Simulate navigation delay
+                setTimeout(() => {
+                    showToast(`Details page for ${cardTitle} would open here`, 'info');
+                }, 1000);
+            } else {
+                showToast(`Click to view details for ${cardTitle}`, 'info');
             }
         });
     });
@@ -365,7 +400,7 @@ function showToast(message, type = 'success') {
         position: 'fixed',
         top: '20px',
         right: '20px',
-        background: type === 'success' ? '#8dc641' : '#e74c3c',
+        background: type === 'success' ? '#8dc641' : type === 'info' ? '#3bb64b' : '#e74c3c',
         color: 'white',
         padding: '12px 24px',
         borderRadius: '8px',
@@ -406,3 +441,78 @@ window.addEventListener('scroll', function() {
 
 // Initialize card interactions when DOM is ready
 document.addEventListener('DOMContentLoaded', initCardInteractions);
+
+// Accessible Tabs for Search Results
+function initTabs() {
+    const tablist = document.querySelector('[role="tablist"]');
+    const tabs = tablist ? tablist.querySelectorAll('[role="tab"]') : [];
+    if (!tablist || tabs.length === 0) return;
+
+    const panels = document.querySelectorAll('[role="tabpanel"]');
+    const resultsTitle = document.getElementById('results-title') || document.querySelector('.results-header h2');
+    const resultsCount = document.querySelector('.results-count');
+
+    function activateTab(tab) {
+        tabs.forEach(t => {
+            const selected = t === tab;
+            t.setAttribute('aria-selected', selected ? 'true' : 'false');
+            t.tabIndex = selected ? 0 : -1;
+        });
+
+        panels.forEach(panel => {
+            const isTarget = panel.id === tab.getAttribute('aria-controls');
+            panel.classList.toggle('hidden', !isTarget);
+        });
+
+        // Update title and count heuristically
+        if (resultsTitle) {
+            const isScholarships = tab.id.includes('scholarships');
+            resultsTitle.textContent = isScholarships ? 'Scholarships' : 'Universities';
+        }
+
+        if (resultsCount) {
+            // Count visible cards inside the active panel
+            const panelId = tab.getAttribute('aria-controls');
+            const activePanel = document.getElementById(panelId);
+            const visibleCards = activePanel ? Array.from(activePanel.querySelectorAll('.card')).filter(c => c.style.display !== 'none') : [];
+            resultsCount.textContent = `${visibleCards.length} results found`;
+        }
+    }
+
+    // Click activation
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => activateTab(tab));
+    });
+
+    // Keyboard navigation
+    tablist.addEventListener('keydown', (e) => {
+        const currentIndex = Array.from(tabs).findIndex(t => t.getAttribute('aria-selected') === 'true');
+        let newIndex = currentIndex;
+
+        switch (e.key) {
+            case 'ArrowRight':
+            case 'ArrowDown':
+                newIndex = (currentIndex + 1) % tabs.length;
+                break;
+            case 'ArrowLeft':
+            case 'ArrowUp':
+                newIndex = (currentIndex - 1 + tabs.length) % tabs.length;
+                break;
+            case 'Home':
+                newIndex = 0;
+                break;
+            case 'End':
+                newIndex = tabs.length - 1;
+                break;
+            default:
+                return;
+        }
+        e.preventDefault();
+        tabs[newIndex].focus();
+        activateTab(tabs[newIndex]);
+    });
+
+    // Ensure initial state is correct
+    const initiallySelected = Array.from(tabs).find(t => t.getAttribute('aria-selected') === 'true') || tabs[0];
+    activateTab(initiallySelected);
+}

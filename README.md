@@ -6,7 +6,7 @@ A clean, modern web interface for Leaply, a platform that helps students apply t
 
 ### Color Palette
 - **Primary Green**: #8dc641 (vibrant, energetic green)
-- **Secondary Green**: #cae122 (bright accent green)
+- **Secondary Green**: #dae122 (bright accent green)
 - **Accent Green**: #3bb64b (medium green for interactions)
 - **Dark Green**: #016839 (deep green for emphasis)
 - **Background**: #FFFFFF (clean white)
@@ -168,7 +168,7 @@ All colors are defined as CSS custom properties in `:root` for easy customizatio
 ```css
 :root {
   --primary-green: #8dc641;
-  --secondary-green: #cae122;
+  --secondary-green: #dae122;
   --accent-green: #3bb64b;
   --dark-green: #016839;
   --background-white: #FFFFFF;
