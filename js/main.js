@@ -365,7 +365,7 @@ function showToast(message, type = 'success') {
         position: 'fixed',
         top: '20px',
         right: '20px',
-        background: type === 'success' ? '#6BBF59' : '#e74c3c',
+        background: type === 'success' ? '#8dc641' : '#e74c3c',
         color: 'white',
         padding: '12px 24px',
         borderRadius: '8px',
